@@ -15,3 +15,5 @@ test('inputCheck() returns an object when a property is missing', () => {
     })
   );
 });
+
+//testing because vscode says this file is deleted
