@@ -30,7 +30,6 @@ app.get("/", (req, res) => {
 });
 */
 
-
 //2.4 Return all the data in the candidates table
 //2.5 Get all candidates
 app.get("/api/candidates", (req, res) => {
@@ -51,8 +50,6 @@ app.get("/api/candidates", (req, res) => {
         });
     });
 });
-
-
 
 //2.4 GET a single candidate
 //2.5 updated Get a single candidate
@@ -76,7 +73,67 @@ app.get("/api/candidate/:id", (req, res) => {
     });
 });
 
+//3.7 app.put to change candidates preferred party
+/* This route might feel a little strange because we're 
+using a parameter for the candidate's id (req.params.id), 
+but the request body contains the party's id (req.body.party_id). 
+Why mix the two? Again, we want to follow best practices for 
+consistency and clarity. The affected row's id should always 
+be part of the route (e.g., /api/candidate/2) while the actual 
+fields we're updating should be part of the body. */
+app.put("/api/candidate/:id", (req, res) => {
+    const errors = inputCheck(req.body, "party_id");
+    if (errors) {
+        res.status(400).json({error: errors});
+        return;
+    }
+    const sql = `UPDATE candidates SET party_id = ?
+                WHERE id = ?`
+    const params = [req.body.party_id, req.params.id];
+    db.run(sql, params, function(err, result) {
+        if (err) {
+            res.status(400).json({error: err.message});
+            return;
+        }
+        res.json({
+            message: "success",
+            data: req.body,
+            changes: this.changes
+        });
+    });
+});
 
+//3.6 get route for parties table all parties
+app.get("/api/parties", (req, res) => {
+    const sql = `SELECT * FROM parties`;
+    const params = [];
+    db.all(sql, params, (err, rows) => {
+        if (err) {
+            res.status(500).json({error: err.message});
+            return;
+        }
+        res.json({
+            message: "success",
+            data: rows
+        });
+    });
+});
+
+//3.6 get route for parties table individual id
+app.get("/api/party/:id", (req, res) => {
+    const sql = `SELECT * FROM parties WHERE id = ?`;
+    const params = [req.params.id];
+    db.get(sql, params, (err, row) => {
+        if (err) {
+            res.status(400).json({error: err.message});
+            return;
+        }
+        res.json({
+            message: "success",
+            data: row
+        });
+    });
+});
 
 //2.4 Delete a candidate
 //2.6 updated Delete a candidate
@@ -96,6 +153,22 @@ app.delete("/api/candidate/:id", (req, res) => {
     });
 });
 
+//3.6 api to delete parties
+//can't use arrow function to reference `this`
+app.delete("/api/party/:id", (req, res) => {
+    const sql = `DELETE FROM parties WHERE id = ?`;
+    const params = [req.params.id];
+    db.run(sql, params, function(err, result) {
+        if (err) {
+            res.status(400).json({error: res.message});
+            return;
+        }
+        res.json({
+            message: "successfully deleted",
+            changes: this.changes
+        });
+    })
+})
 
 //2.7 updated Create a candidate post route
 app.post("/api/candidate", ({body}, res) => {

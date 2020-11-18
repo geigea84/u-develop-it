@@ -114,3 +114,11 @@ LEFT JOIN parties ON candidates.party_id = parties.id;
 SELECT candidates.*, parties.name
 FROM candidates
 LEFT JOIN parties ON candidates.party_id = parties.id;
+
+3.7
+
+What request type would be appropriate for updating data? 
+We've established that GET is for reading, 
+POST for creating, 
+and DELETE for deleting. 
+None of those make sense for updating, but there is a fourth request type we can use: the PUT request.
