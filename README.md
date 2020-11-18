@@ -77,6 +77,29 @@ We need to add one more script to start the Express.js server. Add the following
 
 "start": "node server.js"
 
+migrate the schema.sql format
 npm run migrate
 
+add the information to the database from the seed.sql file
 npm run seed
+
+Create the server.js file in the root directory, using the following command at the command line:
+
+touch server.js
+Open the server.js file and import express at the top of the file, by adding the following code:
+
+const express = require('express');
+Add the PORT designation and the app expression, by adding the following code:
+
+const PORT = process.env.PORT || 3001;
+const app = express();
+Add the Express.js middleware, by adding the following code:
+
+// Express middleware
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+Now let's add the function that will start the Express.js server on port 3001. Place the following code at the bottom of the server.js file:
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
