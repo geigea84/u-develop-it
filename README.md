@@ -39,10 +39,12 @@ format table into columns
 .mode column
 
 1.6
+
 sqlite3 db/election.db < db/schema.sql
 The < is called the input redirect. This will override the default standard input, which is the keyboard, and allows the input to come from a file instead. This is not a feature of SQLite but a feature of the shell running in your terminal. It's like loading a bunch of pretyped commands into sqlite3!
 
 2.3
+
 initialize Node.js (create package.json)
 npm init --y
 
@@ -103,3 +105,12 @@ Now let's add the function that will start the Express.js server on port 3001. P
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+3.5
+
+SELECT * FROM candidates
+LEFT JOIN parties ON candidates.party_id = parties.id;
+
+SELECT candidates.*, parties.name
+FROM candidates
+LEFT JOIN parties ON candidates.party_id = parties.id;
