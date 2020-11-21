@@ -122,3 +122,13 @@ We've established that GET is for reading,
 POST for creating, 
 and DELETE for deleting. 
 None of those make sense for updating, but there is a fourth request type we can use: the PUT request.
+
+5.3
+
+foreign key constraints - need to be turned on to work
+example:
+PRAGMA foreign_keys = ON;
+
+5.5
+
+GROUP BY can consolidate several rows of data, grouping by a shared value
